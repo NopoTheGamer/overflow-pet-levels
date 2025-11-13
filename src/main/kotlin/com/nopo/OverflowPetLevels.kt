@@ -29,14 +29,14 @@ object OverflowPetLevels : ClientModInitializer {
 				for ((index, item) in list.withIndex()) {
 					val text = item as Text
 					if (text.string.contains("MAX LEVEL")) {
-						val newText = (Text.of("MAX LEVEL") as MutableText).formatted(Formatting.AQUA, Formatting.BOLD)
-						val reset = (Text.of("§r") as MutableText).formatted(Formatting.RESET)
+						val newText = Text.literal("MAX LEVEL").formatted(Formatting.AQUA, Formatting.BOLD)
+						val reset = Text.literal("§r").formatted(Formatting.RESET)
 
 						val noBold = newText.style.withBold(false)
 						val xpText =
-							(Text.of("${calcLevel(xp)}✦") as MutableText).setStyle(noBold).formatted(Formatting.GOLD)
-						val openBracket = (Text.of(" [") as MutableText).setStyle(noBold).formatted(Formatting.GRAY)
-						val closeBracket = (Text.of("]") as MutableText).setStyle(noBold).formatted(Formatting.GRAY)
+							Text.literal("${calcLevel(xp)}✦").setStyle(noBold).formatted(Formatting.GOLD)
+						val openBracket = Text.literal(" [").setStyle(noBold).formatted(Formatting.GRAY)
+						val closeBracket = Text.literal("]").setStyle(noBold).formatted(Formatting.GRAY)
 						list.set(index, newText.append(reset).append(openBracket).append(xpText).append(closeBracket))
 						return@ItemTooltipCallback
 					}
