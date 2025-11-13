@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "overflow-pet-levels",
+	"version": "${version}",
+	"name": "Overflow Pet Levels",
+	"description": "Shows overflow pet levels on pets",
+	"authors": [
+		"nopo"
+	],
+	"contact": {
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/overflow-pet-levels/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			{
+				"value": "com.nopo.OverflowPetLevels",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": ">=1.21.5",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	}
+}
