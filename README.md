@@ -1,0 +1,1 @@
+This mod shows you the overflow pet xp of your Hypixel Skyblock pets. It uses the same xp scale that the Golden Dragon pet uses, 1,886,700 per [level above 102](https://wiki.hypixel.net/Golden_Dragon_Pet#:~:text=own%2E-,Leveling).
