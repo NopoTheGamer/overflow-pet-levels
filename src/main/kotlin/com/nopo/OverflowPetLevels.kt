@@ -4,39 +4,37 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
+import net.minecraft.ChatFormatting
+import net.minecraft.core.component.DataComponents
+import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.TooltipFlag
 
 object OverflowPetLevels : ClientModInitializer {
 
 	override fun onInitializeClient() {}
 
 	init {
-		ItemTooltipCallback.EVENT.register(ItemTooltipCallback { itemStack: ItemStack, tooltipContext: Item.TooltipContext?, tooltipType: TooltipType?, list: MutableList<Text?> ->
+		ItemTooltipCallback.EVENT.register(ItemTooltipCallback { itemStack: ItemStack, tooltipContext: Item.TooltipContext, tooltipType: TooltipFlag?, list: MutableList<Component> ->
 			if (itemStack.item != Items.PLAYER_HEAD) return@ItemTooltipCallback
-			val nbt = itemStack.get(DataComponentTypes.CUSTOM_DATA)?.copyNbt() ?: return@ItemTooltipCallback
+			val nbt = itemStack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return@ItemTooltipCallback
 			if (!nbt.contains("petInfo")) return@ItemTooltipCallback
 			val petinfo = nbt.get("petInfo")?.asString()?.orElse(null) ?: return@ItemTooltipCallback
 			val json: JsonObject = Gson().fromJson(petinfo, JsonObject::class.java)
 			if (json.has("exp")) {
 				val xp = json.get("exp")?.asFloat ?: return@ItemTooltipCallback
-				for ((index, item) in list.withIndex()) {
-					val text = item as Text
+				for ((index, text) in list.withIndex()) {
 					if (text.string.contains("MAX LEVEL")) {
-						val newText = Text.literal("MAX LEVEL").formatted(Formatting.AQUA, Formatting.BOLD)
-						val reset = Text.literal("§r").formatted(Formatting.RESET)
+						val newText = Component.literal("MAX LEVEL").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD)
+						val reset = Component.literal("§r").withStyle(ChatFormatting.RESET)
 
 						val noBold = newText.style.withBold(false)
 						val xpText =
-							Text.literal("${calcLevel(xp)}✦").setStyle(noBold).formatted(Formatting.GOLD)
-						val openBracket = Text.literal(" [").setStyle(noBold).formatted(Formatting.GRAY)
-						val closeBracket = Text.literal("]").setStyle(noBold).formatted(Formatting.GRAY)
+							Component.literal("${calcLevel(xp)}✦").setStyle(noBold).withStyle(ChatFormatting.GOLD)
+						val openBracket = Component.literal(" [").setStyle(noBold).withStyle(ChatFormatting.GRAY)
+						val closeBracket = Component.literal("]").setStyle(noBold).withStyle(ChatFormatting.GRAY)
 						list.set(index, newText.append(reset).append(openBracket).append(xpText).append(closeBracket))
 						return@ItemTooltipCallback
 					}
